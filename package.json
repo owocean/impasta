@@ -1,0 +1,29 @@
+{
+  "name": "impasta",
+  "version": "0.0.0",
+  "description": "Among us cheat utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owocean/impasta.git"
+  },
+  "keywords": [
+    "amongus",
+    "game",
+    "cheat"
+  ],
+  "author": "owocean",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/owocean/impasta/issues"
+  },
+  "homepage": "https://github.com/owocean/impasta#readme",
+  "dependencies": {
+    "cap": "^0.2.1",
+    "chalk": "^4.1.0",
+    "keypress": "^0.2.1"
+  }
+}
