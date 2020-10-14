@@ -24,6 +24,8 @@
   "dependencies": {
     "cap": "^0.2.1",
     "chalk": "^4.1.0",
-    "keypress": "^0.2.1"
+    "dotenv": "^8.2.0",
+    "keypress": "^0.2.1",
+    "request": "^2.88.2"
   }
 }

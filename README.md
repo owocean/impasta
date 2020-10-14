@@ -21,7 +21,8 @@ npm i
 ```sh
 node index
 ```
-Press `v` to toggle verbose output
+Press `v` to toggle verbose output  
+Once the script is running it will automatically begin capturing packets
 
 ## features
 - [x] Log chat messages
@@ -30,4 +31,4 @@ Press `v` to toggle verbose output
 - [ ] Identify players by Name/color
 - [ ] Log events (Task complete, Murder, etc.)
 - [ ] Force meetings/murders/etc.
-- [ ] Emit webhook/websocket on event
+- [x] Emit webhook on event
