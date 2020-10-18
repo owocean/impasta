@@ -1,5 +1,4 @@
 const { print } = require("./interface.js");
-const emit = require("./hook.js");
 
 let players = {};
 
@@ -25,12 +24,11 @@ function message(msg) {
                             if (players[bytes[read.start]] != undefined) break;
                             players[bytes[read.start]] = { "impostor": false };
                             print("User " + bytes[read.start] + " joined", "green");
-                            emit("join " + bytes[read.start]);
                             break;
                         case 0x0d:
                             let chat = getLengthedString(bytes, read.start + 2);
                             print(bytes[read.start] + ": " + chat, "greenBright");
-                            emit("chat " + bytes[read.start] + " " + chat);
+                            
                             break;
                         case 0x03:
                             let num = bytes[read.start + 2];
@@ -42,15 +40,12 @@ function message(msg) {
                                 impostors[j] = impostors[j].toString(10);
                             }
                             print(num.toString(10) + " players are impostors. IDs: " + impostors.join(" "), "white");
-                            emit("impostors " + num.toString(10) + " " + impostors.join(" "));
                             break;
                         case 0x0e:
                             print("Meeting was called", "green");
-                            emit("meeting");
                             break;
                         case 0x16:
                             print("Meeting ended", "green");
-                            emit("endmeeting");
                             break;
                     }
                 }
@@ -58,7 +53,7 @@ function message(msg) {
             }
         } else if (t == 0x02) {
             print("Game started", "white");
-            emit("start");
+            
         }
     }
 }
