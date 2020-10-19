@@ -63,9 +63,12 @@ function message(msg) {
                                 const player = {
                                     number: player_number, name: player_name, color: player_color, hat: player_hat, pet: player_pet, skin: player_skin
                                 };
+                                const { name: old_name } = players[player_number] || {};
+                                if (old_name != player.name) {
+                                    print(JSON.stringify(player), "white");
+                                }
                                 players[player_number] = player;
                                 k += (player_length + 3);
-                                console.log(player);
                             }
                             break;
                         }
