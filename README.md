@@ -24,6 +24,12 @@ node index
 Press `v` to toggle verbose output  
 Once the script is running it will automatically begin capturing packets
 
+## testing
+```sh
+node test
+```
+Replays the match recorded in the text file named "replay".
+
 ## features
 - [x] Log chat messages
 - [x] Log player joins
