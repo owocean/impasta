@@ -28,7 +28,7 @@ Once the script is running it will automatically begin capturing packets
 - [x] Log chat messages
 - [x] Log player joins
 - [x] Identify Impostors
-- [ ] Identify players by Name/color
+- [x] Identify players by Name/color
 - [ ] Log events (Task complete, Murder, etc.)
 - [ ] Force meetings/murders/etc.
 - [x] Emit webhook on event
