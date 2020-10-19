@@ -1,5 +1,5 @@
 const { print } = require("./interface.js");
-const emit = require("./hook.js");
+const COLORS = require("./colors.json");
 
 let players = {};
 
@@ -25,40 +25,60 @@ function message(msg) {
                             if (players[bytes[read.start]] != undefined) break;
                             players[bytes[read.start]] = { "impostor": false };
                             print("User " + bytes[read.start] + " joined", "green");
-                            emit("join " + bytes[read.start]);
                             break;
                         case 0x0d:
                             let chat = getLengthedString(bytes, read.start + 2);
                             print(bytes[read.start] + ": " + chat, "greenBright");
-                            emit("chat " + bytes[read.start] + " " + chat);
+
                             break;
-                        case 0x03:
-                            let num = bytes[read.start + 2];
-                            let impostors = [];
-                            for (var e = 0; e < num; e++) {
+                        case 0x03: {
+                            const num = bytes[read.start + 2];
+                            const impostors = [];
+                            for (let e = 0; e < num; e++) {
                                 impostors.push(bytes[read.start + 3 + e]);
                             }
-                            for (var j in impostors) {
-                                impostors[j] = impostors[j].toString(10);
-                            }
-                            print(num.toString(10) + " players are impostors. IDs: " + impostors.join(" "), "white");
-                            emit("impostors " + num.toString(10) + " " + impostors.join(" "));
+                            const impostorPlayers = Object.values(players)
+                                .filter(({ number }) => impostors.includes(number));
+                            print(num.toString(10) + " players are impostors:", "red");
+                            impostorPlayers.forEach(({ name, color }) => print('\t' + name + ' (' + color + ')', "white"));
                             break;
+                        }
                         case 0x0e:
                             print("Meeting was called", "green");
-                            emit("meeting");
                             break;
                         case 0x16:
                             print("Meeting ended", "green");
-                            emit("endmeeting");
                             break;
+                        case 0x1e: {
+                            for (let k = read.start + 2; k < bytes.length;) {
+                                const player_length = bytes[k];
+                                const player_number = Buffer.from(bytes.slice(k + 1, k + 3)).readUInt16BE(0);
+                                const player_name_length = bytes[k + 3];
+                                const player_name = decode(bytes.slice(k + 4, k + 4 + player_name_length));
+                                const data_begin = k + 4 + player_name_length;
+                                const player_color = COLORS[bytes[data_begin]];
+                                const player_hat = bytes[data_begin + 1];
+                                const player_pet = bytes[data_begin + 2];
+                                const player_skin = bytes[data_begin + 3]
+                                const player = {
+                                    number: player_number, name: player_name, color: player_color, hat: player_hat, pet: player_pet, skin: player_skin
+                                };
+                                const { name: old_name } = players[player_number] || {};
+                                if (old_name != player.name) {
+                                    print(JSON.stringify(player), "white");
+                                }
+                                players[player_number] = player;
+                                k += (player_length + 3);
+                            }
+                            break;
+                        }
                     }
                 }
                 i = read.end;
             }
         } else if (t == 0x02) {
             print("Game started", "white");
-            emit("start");
+
         }
     }
 }
@@ -87,6 +107,10 @@ function getLengthedString(buffer, offset) {
     }
 
     return text;
+}
+
+function decode(bytes) {
+    return new TextDecoder().decode(Uint8Array.from(bytes));
 }
 
 module.exports = message;
