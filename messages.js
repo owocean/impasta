@@ -40,7 +40,7 @@ function message(msg) {
                             const impostorPlayers = Object.values(players)
                                 .filter(({ number }) => impostors.includes(number));
                             print(num.toString(10) + " players are impostors:", "red");
-                            impostorPlayers.forEach(({ name, color }) => print('\t' + name + ' (' + color + ')', color));
+                            impostorPlayers.forEach(({ name, color }) => print('\t' + name + ' (' + color + ')', "white"));
                             break;
                         }
                         case 0x0e:
@@ -65,6 +65,7 @@ function message(msg) {
                                 };
                                 players[player_number] = player;
                                 k += (player_length + 3);
+                                console.log(player);
                             }
                             break;
                         }
