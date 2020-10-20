@@ -1,7 +1,7 @@
 {
   "name": "impasta",
   "version": "0.0.0",
-  "description": "Among us cheat utility",
+  "description": "Among us playground/utility",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

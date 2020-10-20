@@ -6,7 +6,7 @@ var message = require("./messages.js");
 function init(dev){
     var c = new Cap();
     var device = Cap.findDevice(dev);
-    var filter = 'udp and port 22023';
+    var filter = 'udp and port 22023 or 22123 or 22223 or 22323 or 22423';
     var bufSize = 10 * 1024 * 1024;
     var buffer = Buffer.alloc(65535);
 

@@ -1,6 +1,6 @@
 # impasta (unfinished)
-Among Us cheat utility  
-Instead of reading memory like the other cheats, this app watches for UDP packets sent and received from the among us servers.  
+Among Us playground/utility  
+Instead of reading memory like the other tools, this app watches for UDP packets sent and received from the among us servers.  
 
 ## NOTICE
 **PLEASE DO NOT USE THIS TO CHEAT IN REAL GAMES!**  

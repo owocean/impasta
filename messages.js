@@ -1,12 +1,15 @@
 const { print } = require("./interface.js");
 const COLORS = require("./colors.json");
+const { bgWhite } = require("chalk");
 
 let players = {};
+let gamestart = false;
 
 function message(msg) {
     let bytes = Buffer.from(msg, "hex");
     if (bytes[0] == 0x09) {
         players = {};
+        gamestart = false;
     }
     if (bytes[0] != 0x01) return;
     else {
@@ -20,16 +23,10 @@ function message(msg) {
                 if (read.head == 0x0002) {
                     let opt = bytes[read.start + 1];
                     switch (opt) {
-                        // todo: add playernames and more events
-                        case 0x08:
-                            if (players[bytes[read.start]] != undefined) break;
-                            players[bytes[read.start]] = { "impostor": false };
-                            print("User " + bytes[read.start] + " joined", "green");
-                            break;
+                        // todo: add more events
                         case 0x0d:
                             let chat = getLengthedString(bytes, read.start + 2);
                             print(bytes[read.start] + ": " + chat, "greenBright");
-
                             break;
                         case 0x03: {
                             const num = bytes[read.start + 2];
@@ -44,10 +41,10 @@ function message(msg) {
                             break;
                         }
                         case 0x0e:
-                            print("Meeting was called", "green");
+                            print("Meeting was called", "red");
                             break;
                         case 0x16:
-                            print("Meeting ended", "green");
+                            print("Meeting ended", "red");
                             break;
                         case 0x1e: {
                             for (let k = read.start + 2; k < bytes.length;) {
@@ -55,6 +52,7 @@ function message(msg) {
                                 const player_number = Buffer.from(bytes.slice(k + 1, k + 3)).readUInt16BE(0);
                                 const player_name_length = bytes[k + 3];
                                 const player_name = decode(bytes.slice(k + 4, k + 4 + player_name_length));
+                                if (player_name == "") return;
                                 const data_begin = k + 4 + player_name_length;
                                 const player_color = COLORS[bytes[data_begin]];
                                 const player_hat = bytes[data_begin + 1];
@@ -64,21 +62,24 @@ function message(msg) {
                                     number: player_number, name: player_name, color: player_color, hat: player_hat, pet: player_pet, skin: player_skin
                                 };
                                 const { name: old_name } = players[player_number] || {};
-                                if (old_name != player.name) {
-                                    print(JSON.stringify(player), "white");
+                                if (old_name != player.name && !gamestart) {
+                                    print(`${player.name} joined (${player.color})`, "blueBright");
                                 }
                                 players[player_number] = player;
                                 k += (player_length + 3);
                             }
                             break;
                         }
+                        case 0x0c:
+                            print(bytes[read.start]+" was murdered", "bgRed");
+                            break;
                     }
                 }
                 i = read.end;
             }
         } else if (t == 0x02) {
             print("Game started", "white");
-
+            gamestart = true;
         }
     }
 }
